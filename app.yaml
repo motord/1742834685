@@ -1,0 +1,54 @@
+application: k2cache
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+default_expiration: "5d"
+
+builtins:
+- appstats: on
+- admin_redirect: on
+- deferred: on
+- remote_api: on
+
+libraries:
+- name: jinja2
+  version: "2.6"
+- name: markupsafe
+  version: "0.15"
+
+inbound_services:
+- warmup
+
+handlers:
+- url: /favicon.ico
+  static_files: application/static/img/favicon.ico
+  upload: application/static/img/favicon.ico
+
+- url: /gae_mini_profiler/static
+  static_dir: gae_mini_profiler/static
+
+- url: /gae_mini_profiler/.*
+  script: gae_mini_profiler.main.application
+
+- url: /static
+  static_dir: application/static
+
+- url: /(admin|client|m|shop|support)/
+  script: application.app
+
+- url: /
+  static_files: blog/index.html
+  upload: blog/index.html
+
+- url: /([0-9a-zA-z_-]*)/?
+  static_files: blog/\1/index.html
+  upload: blog/.*
+
+- url: /([0-9a-zA-z_-]*)/([0-9a-zA-z_-]*)/?
+  static_files: blog/\1/\2/index.html
+  upload: blog/.*
+
+- url: /
+  static_dir: blog
