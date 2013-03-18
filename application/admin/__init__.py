@@ -22,7 +22,7 @@ bridge = Blueprint('bridge', __name__, template_folder='templates')
 def panel():
     return render_template('panel.html')
 
-@bridge.route('/admin/stock', methods=['GET', 'POST'])
+@bridge.route('/admin/stock', methods=['POST'])
 @admin_required
 def stock():
     pass
