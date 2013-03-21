@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>Admin Control Panel</h3>
+<div class="row">
+    <div class="span4">
+        <div id="inventory">
+            <h4>Inventory</h4>
+            <ul id="lineitems">
+                {% for li in lineitems %}
+                <li><span>{{ li.capacity }}</span><span>{{ li.tally }}</span></li>
+                {% endfor %}
+            </ul>
+            <form id="stock-form" class="well form-horizontal"
+                  action="{{ url_for('bridge.stock') }}" method="post" accept-charset="utf-8">
+                <fieldset>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input class="btn btn-primary" type="submit" value="Replenish"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}

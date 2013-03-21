@@ -12,6 +12,7 @@ from application.decorators import admin_required
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from warehouse import Inventory
+from models import Registry
 from application.support.models import Ticket
 from application.client.models import Profile
 
@@ -20,12 +21,15 @@ bridge = Blueprint('bridge', __name__, template_folder='templates')
 @bridge.route('/admin/', methods=['GET', 'POST'])
 @admin_required
 def panel():
-    return render_template('panel.html')
+    q=Registry.query().iter()
+    return render_template('panel.html', lineitems=q)
 
 @bridge.route('/admin/stock', methods=['POST'])
 @admin_required
 def stock():
-    pass
+    Inventory.stock()
+    flash(u'Stock replenishment started.', 'success')
+    return redirect(url_for('bridge.panel'))
     # remark = intepreter.parse(request.data)
     # message=Message(channel=channel.key, from_user=remark['fromUser'],
     #                 to_user=remark['toUser'], create_time=remark['createTime'],

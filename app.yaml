@@ -17,6 +17,8 @@ libraries:
   version: "2.6"
 - name: markupsafe
   version: "0.15"
+- name: PIL
+  version: latest
 
 inbound_services:
 - warmup
@@ -35,7 +37,7 @@ handlers:
 - url: /static
   static_dir: application/static
 
-- url: /(admin|client|m|shop|support)/
+- url: /(admin|client|m|shop|support|alpha|beta|gamma)/.*
   script: application.app
 
 - url: /
