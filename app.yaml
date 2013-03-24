@@ -37,7 +37,7 @@ handlers:
 - url: /static
   static_dir: application/static
 
-- url: /(admin|client|m|shop|support|alpha|beta|gamma)/.*
+- url: /(admin|client|m|shop|support|alpha|beta|gamma|api)/.*
   script: application.app
 
 - url: /

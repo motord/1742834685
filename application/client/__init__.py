@@ -12,3 +12,11 @@ portal = Blueprint('portal', __name__, template_folder='templates')
 @portal.route('/client/', methods=['GET'])
 def home():
     return render_template('home.html')
+
+@portal.route('/api/campaign.json', methods=['GET'])
+def campaign():
+    return render_template('home.html')
+
+@portal.route('/api/qrcode.json', methods=['GET'])
+def qrcode():
+    return render_template('home.html')

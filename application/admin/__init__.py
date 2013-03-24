@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'peter'
 
-from flask import Blueprint, request, Response, render_template, flash, redirect, url_for
+from flask import Blueprint, request, Response, render_template, flash, redirect, url_for, current_app, json
 # from decorators import signature_verified, channel_required, bot_required
 # from models import Channel, Message, Bot
 # import choir
@@ -23,6 +23,15 @@ bridge = Blueprint('bridge', __name__, template_folder='templates')
 def panel():
     q=Registry.query().iter()
     return render_template('panel.html', lineitems=q)
+
+@bridge.route('/api/registry.json', methods=['GET'])
+@admin_required
+def registry():
+    q=Registry.query().iter()
+    lineitems=[]
+    for lineitem in q:
+        lineitems.append({'capacity' : lineitem.capacity, 'tally' : lineitem.tally})
+    return current_app.response_class(json.dumps(lineitems, indent=None if request.is_xhr else 2), mimetype='application/json')
 
 @bridge.route('/admin/stock', methods=['POST'])
 @admin_required
