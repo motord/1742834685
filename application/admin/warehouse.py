@@ -91,7 +91,6 @@ class Inventory(object):
             total += bucket.headcount
         return total
 
-    @ndb.transactional(xg=True)
     def bucket(self):
         qrcodes=[]
         for q in range(32):
