@@ -101,7 +101,7 @@ class Inventory(object):
         bucket = Bucket.get_by_id(shard_string_index)
         if bucket is None:
             bucket = Bucket(id=shard_string_index)
-        bucket.headcount += keys.count()
+        bucket.headcount += len(keys)
         bucket.qrcodes=keys
         bucket.put()
 
