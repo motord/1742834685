@@ -17,6 +17,7 @@ from application.support.models import Ticket
 from application.client.models import Profile
 
 bridge = Blueprint('bridge', __name__, template_folder='templates')
+inventory = Inventory()
 
 @bridge.route('/admin/', methods=['GET', 'POST'])
 @admin_required
@@ -36,7 +37,7 @@ def registry():
 @bridge.route('/admin/stock', methods=['POST'])
 @admin_required
 def stock():
-    Inventory.stock()
+    inventory.stock()
     flash(u'Stock replenishment started.', 'success')
     return redirect(url_for('bridge.panel'))
     # remark = intepreter.parse(request.data)
@@ -54,5 +55,5 @@ def stock():
 
 @bridge.route('/admin/heartbeat', methods=['GET'])
 def heartbeat():
-    Inventory.bucket()
+    inventory.bucket()
     return 'OK'

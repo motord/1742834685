@@ -63,8 +63,7 @@ class Inventory(object):
             qrcodes.append(code)
         return ndb.put_multi(qrcodes)
 
-    @staticmethod
-    def stock(cls):
+    def stock(self):
         holding=[]
         campaigns=[]
         for r in Registry.query().iter():
@@ -93,8 +92,7 @@ class Inventory(object):
         return total
 
     @ndb.transactional
-    @staticmethod
-    def bucket():
+    def bucket(self):
         qrcodes=[]
         for q in range(32):
             qrcodes.append(QRCode())
