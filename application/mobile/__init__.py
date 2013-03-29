@@ -12,8 +12,14 @@ scanner = Blueprint('scanner', __name__, template_folder='templates')
 
 @scanner.route('/m/<string:key>', methods=['GET'])
 @qrcode_required
-def scan(qrcode):
-    pass
+def scan(qrcode, **kwargs):
+    url=qrcode.redirect
+    if url:
+        return redirect(url)
+    url=qrcode.campaign.redirect
+    if url:
+        return redirect(url)
+    return render_template('hosting.html')
 
 @scanner.route('/alpha/<string:key>', methods=['GET'])
 @qrcode_required

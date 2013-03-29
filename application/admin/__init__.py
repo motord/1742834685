@@ -22,7 +22,7 @@ bridge = Blueprint('bridge', __name__, template_folder='templates')
 @admin_required
 def panel():
     q=Registry.query().iter()
-    return render_template('panel.html', lineitems=q)
+    return render_template('dashboard.html', lineitems=q, bucket_count=Inventory.bucket_count())
 
 @bridge.route('/api/registry.json', methods=['GET'])
 @admin_required
@@ -51,3 +51,8 @@ def stock():
     #                 message_type=retort['msgType'], message=retort['message'])
     # message.put()
     # return Response(retort['message'], content_type='application/xml;charset=utf-8')
+
+@bridge.route('/admin/heartbeat', methods=['GET'])
+def heartbeat():
+    Inventory.bucket()
+    return 'OK'

@@ -1,13 +1,15 @@
-{% extends "base.html" %}
+{% extends "admin.html" %}
 
 {% block ngapp %}ng-app="panel"
 {% endblock ngapp %}
-
+{% block head_script %}
+<script src="/assets/twitter/javascripts/admin/panel.js"></script>
+{% endblock head_script %}
 {% block content %}
 <div class="row">
-    <div class="span4">
-        <div id="inventory">
-            <h4>Inventory</h4>
+    <div class="span3">
+        <div id="registry">
+            <h4>Registry</h4>
             <ul id="lineitems">
                 {% for li in lineitems %}
                 <li><span>{{ li.capacity }}</span><span>{{ li.tally }}</span></li>
@@ -23,6 +25,12 @@
                     </div>
                 </fieldset>
             </form>
+        </div>
+    </div>
+    <div class="span3">
+        <div id="pool">
+            <h4>Pool</h4>
+            <div>{{ bucket_count }}</div>
         </div>
     </div>
 </div>

@@ -9,3 +9,8 @@ class Registry(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     modified = ndb.DateTimeProperty(auto_now=True)
 
+class Bucket(ndb.Model):
+    headcount = ndb.IntegerProperty(default=0)
+    qrcodes = ndb.KeyProperty(repeated=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    modified = ndb.DateTimeProperty(auto_now=True)
