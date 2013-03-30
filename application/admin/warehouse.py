@@ -9,11 +9,13 @@ from models import Registry, Bucket
 import StringIO
 import logging
 import random
+from application.decorators import cached
 
 PRODUCT=32
 CAPACITIES = [2**x for x in range(0,6)]
 CODE_URL = 'http://qrcache.com/m/{0}'
 NUM_SHARDS = 256
+BUCKET_SIZE = 4
 
 class Inventory(object):
 
@@ -85,6 +87,7 @@ class Inventory(object):
         pass
 
     @staticmethod
+    @cached(key='bucket_count')
     def bucket_count():
         total=0
         for bucket in Bucket.query():
@@ -93,7 +96,7 @@ class Inventory(object):
 
     def bucket(self):
         qrcodes=[]
-        for q in range(32):
+        for q in range(BUCKET_SIZE):
             qrcodes.append(QRCode())
         keys=ndb.put_multi(qrcodes)
         keys=Inventory.assemble(keys)
@@ -104,4 +107,22 @@ class Inventory(object):
         bucket.headcount += len(keys)
         bucket.qrcodes=keys
         bucket.put()
+
+    def alloc(self, n):
+        keys=[]
+        remainder=n
+        for bucket in Bucket.query():
+            available=len(bucket.qrcodes)
+            if available>=remainder:
+                keys.extend(bucket.qrcodes[:remainder])
+                bucket.qrcodes=bucket.qrcodes[remainder:]
+                bucket.headcount-=remainder
+                bucket.put()
+                return keys
+            else:
+                remainder-=available
+                keys.extend(bucket.qrcodes)
+                bucket.qrcodes=[]
+                bucket.headcount=0
+                bucket.put()
 

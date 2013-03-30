@@ -1,4 +1,4 @@
 cron:
 - description:
   url: /admin/heartbeat
-  schedule: every 8 minutes
+  schedule: every 4 minutes
