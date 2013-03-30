@@ -7,11 +7,13 @@ from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from application.models import Campaign, QRCode
 from decorators import qrcode_required
+from tracker import tracked
 
 scanner = Blueprint('scanner', __name__, template_folder='templates')
 
 @scanner.route('/m/<string:key>', methods=['GET'])
 @qrcode_required
+@tracked
 def scan(qrcode, **kwargs):
     url=qrcode.redirect
     if url:

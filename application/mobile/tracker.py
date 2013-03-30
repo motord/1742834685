@@ -5,13 +5,13 @@ from functools import wraps
 from flask import redirect, request, abort
 from google.appengine.ext import ndb
 from application.models import QRCode
+import logging
 
-def qrcode_required(func):
+def tracked(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        key=ndb.Key(urlsafe=kwargs['key'])
-        kwargs['key']=key
-        qrcode=key.get()
-        kwargs['qrcode']=qrcode
+        key=kwargs['key']
+        logging.info('{0} tracked'.format(key))
+        qrcode=kwargs['qrcode']
         return func(*args, **kwargs)
     return decorated_view
