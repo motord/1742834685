@@ -22,8 +22,8 @@ inventory = Inventory()
 @bridge.route('/admin/', methods=['GET', 'POST'])
 @admin_required
 def panel():
-    q=Registry.query().iter()
-    return render_template('dashboard.html', lineitems=q, bucket_count=Inventory.bucket_count())
+    # q=Registry.query().iter()
+    return render_template('dashboard.html', bucket_count=Inventory.bucket_count())
 
 @bridge.route('/api/registry.json', methods=['GET'])
 @admin_required
