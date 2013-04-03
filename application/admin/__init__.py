@@ -25,15 +25,6 @@ def panel():
     # q=Registry.query().iter()
     return render_template('dashboard.html', bucket_count=Inventory.bucket_count())
 
-@bridge.route('/api/registry.json', methods=['GET'])
-@admin_required
-def registry():
-    q=Registry.query().iter()
-    lineitems=[]
-    for lineitem in q:
-        lineitems.append({'capacity' : lineitem.capacity, 'tally' : lineitem.tally})
-    return current_app.response_class(json.dumps(lineitems, indent=None if request.is_xhr else 2), mimetype='application/json')
-
 @bridge.route('/admin/stock', methods=['POST'])
 @admin_required
 def stock():
