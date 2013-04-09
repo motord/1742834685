@@ -6,10 +6,22 @@
 <script src="/assets/twitter/javascripts/client/overview.js"></script>
 {% endblock head_script %}
 {% block content %}
-<div class="row">
+<div class="row-fluid">
     <div class="span3">
-        <div id="greeting">
-            <h4>Hi {{ profile.nickname }}!</h4>
+        <div class="well sidebar-nav" id="actions">
+            <ul class="nav nav-list" id="actions-list">
+                <li class="nav-header" id="campaigns">Campaign {{ qrcode.campaign.get().name }}</li>
+                <li class="nav-header" id="qrcode"><img class="alpha" src="/alpha/{{ qrcode.key.urlsafe() }}" /></li>
+                <li><span class="badge"><a href="/beta/{{ qrcode.key.urlsafe() }}">Beta</a></span></li>
+                <li><span class="badge"><a href="/gamma/{{ qrcode.key.urlsafe() }}">Gamma</a></span></li>
+                <li>
+                    <ul>
+                        {% for tag in qrcode.tags %}
+                        <li><span class="label label-info">{{ tag }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

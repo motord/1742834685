@@ -5,16 +5,17 @@ from flask import Blueprint, request, Response, render_template, flash, redirect
 import logging
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 from decorators import profile_required
+from forms import CampaignForm, QRCodeForm
 
 from application.models import Campaign, QRCode
 from application.admin.warehouse import Inventory
+from application.mobile.decorators import qrcode_required, campaign_required
 
 portal = Blueprint('portal', __name__, template_folder='templates')
 
 @portal.route('/client/', methods=['GET'])
 @profile_required
 def overview(profile):
-
     return render_template('overview.html', profile=profile)
 
 @portal.route('/client/account', methods=['GET'])
@@ -35,10 +36,12 @@ def support(profile):
 
     return render_template('support.html', profile=profile)
 
-@portal.route('/api/campaign.json', methods=['GET'])
-def campaign():
-    return render_template('campaign.html')
+@portal.route('/client/<string:key>.campaign', methods=['GET'])
+@campaign_required
+def campaign(campaign, **kwargs):
+    return render_template('campaign.html', campaign=campaign)
 
-@portal.route('/api/qrcode.json', methods=['GET'])
-def qrcode():
-    return render_template('qrcode.html')
+@portal.route('/client/<string:key>.qrcode', methods=['GET'])
+@qrcode_required
+def qrcode(qrcode, **kwargs):
+    return render_template('qrcode.html', qrcode=qrcode)

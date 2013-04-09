@@ -6,11 +6,13 @@
 <script src="/assets/twitter/javascripts/admin/dashboard.js"></script>
 {% endblock head_script %}
 {% block content %}
-<div class="row">
+<div class="row-fluid">
     <div class="span3">
-        <div id="buckets">
-            <h4>Buckets holding</h4>
-            <div>{{ bucket_count }}</div>
+        <div class="well sidebar-nav" id="stats">
+            <ul class="nav nav-list" id="stats-list">
+                <li class="nav-header">Stats</li>
+                <li id="buckets"><span class="label label-info">Buckets holding {{ bucket_count }} qrcodes.</span></li>
+            </ul>
         </div>
     </div>
 </div>

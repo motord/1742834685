@@ -14,7 +14,7 @@ from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 from application.admin.models import Registry
 from application.support.models import Ticket
 from application.client.models import Profile
-from decorators import campaign_required
+from application.mobile.decorators import campaign_required
 from application.mobile.decorators import qrcode_required
 
 cruncher = Blueprint('cruncher', __name__, template_folder='templates')
@@ -49,7 +49,7 @@ def qrcode(qrcode, **kwargs):
 @cruncher.route('/api/<string:key>.tags', methods=['GET'])
 @qrcode_required
 @admin_required
-def qrcode(qrcode, **kwargs):
+def tags(qrcode, **kwargs):
     tags=qrcode.tags
     return current_app.response_class(json.dumps(tags, indent=None if request.is_xhr else 2), mimetype='application/json')
 

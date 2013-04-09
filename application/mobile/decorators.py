@@ -15,3 +15,13 @@ def qrcode_required(func):
         kwargs['qrcode']=qrcode
         return func(*args, **kwargs)
     return decorated_view
+
+def campaign_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        key=ndb.Key(urlsafe=kwargs['key'])
+        kwargs['key']=key
+        campaign=key.get()
+        kwargs['campaign']=campaign
+        return func(*args, **kwargs)
+    return decorated_view

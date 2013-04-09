@@ -6,10 +6,16 @@
 <script src="/assets/twitter/javascripts/client/overview.js"></script>
 {% endblock head_script %}
 {% block content %}
-<div class="row">
+<div class="row-fluid">
     <div class="span3">
-        <div id="greeting">
-            <h4>Hi {{ profile.nickname }}!</h4>
+        <div class="well sidebar-nav" id="actions">
+            <ul class="nav nav-list" id="actions-list">
+                <li class="nav-header" id="greeting">Hi {{ profile.nickname }}!</li>
+                <li class="nav-header" id="campaigns">Campaigns</li>
+                {% for key in profile.campaigns %}
+                <li><span class="badge"><a href="/client/{{ key.urlsafe() }}.campaign">{{ key.get().name }}</a></span></li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>

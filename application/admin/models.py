@@ -14,3 +14,7 @@ class Bucket(ndb.Model):
     qrcodes = ndb.KeyProperty(repeated=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
     modified = ndb.DateTimeProperty(auto_now=True)
+
+class Lead(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    modified = ndb.DateTimeProperty(auto_now=True)

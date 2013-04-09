@@ -46,5 +46,5 @@ def stock():
 
 @bridge.route('/admin/heartbeat', methods=['GET'])
 def heartbeat():
-    inventory.bucket()
+    # inventory.bucket()
     return 'OK'
