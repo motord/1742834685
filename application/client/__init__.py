@@ -4,7 +4,7 @@ __author__ = 'peter'
 from flask import Blueprint, request, Response, render_template, flash, redirect, url_for
 import logging
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
-from decorators import profile_required
+from decorators import profile_required, ownership_required
 from forms import CampaignForm, QRCodeForm
 
 from application.models import Campaign, QRCode
@@ -38,10 +38,14 @@ def support(profile):
 
 @portal.route('/client/<string:key>.campaign', methods=['GET'])
 @campaign_required
+@profile_required
+@ownership_required
 def campaign(campaign, **kwargs):
     return render_template('campaign.html', campaign=campaign)
 
 @portal.route('/client/<string:key>.qrcode', methods=['GET'])
 @qrcode_required
+@profile_required
+@ownership_required
 def qrcode(qrcode, **kwargs):
     return render_template('qrcode.html', qrcode=qrcode)
