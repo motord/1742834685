@@ -11,15 +11,10 @@
         <div class="well sidebar-nav" id="actions">
             <ul class="nav nav-list" id="actions-list">
                 <li class="nav-header" id="campaigns">{{ campaign.name }}</li>
+                <hr>
                 {% for key in campaign.qrcodes %}
                 <li><a href="/client/{{ key.urlsafe() }}.qrcode">
                     <img class="alpha" src="/alpha/{{ key.urlsafe() }}" />
-                    </a>
-                    <ul>
-                    {% for tag in key.get().tags %}
-                        <li><span class="label label-info">{{ tag }}</span></li>
-                    {% endfor %}
-                    </ul>
                     </a>
                 </li>
                 {% endfor %}

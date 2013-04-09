@@ -11,19 +11,18 @@ from application.decorators import admin_required
 # from forms import ChannelForm, BotForm
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
-from warehouse import Inventory
+from warehouse import inventory
 from models import Registry
 from application.support.models import Ticket
 from application.client.models import Profile
 
 bridge = Blueprint('bridge', __name__, template_folder='templates')
-inventory = Inventory()
 
 @bridge.route('/admin/', methods=['GET', 'POST'])
 @admin_required
 def panel():
     # q=Registry.query().iter()
-    return render_template('dashboard.html', bucket_count=Inventory.bucket_count())
+    return render_template('dashboard.html', bucket_count=inventory.bucket_count())
 
 @bridge.route('/admin/stock', methods=['POST'])
 @admin_required

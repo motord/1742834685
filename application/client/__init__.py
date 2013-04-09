@@ -8,7 +8,7 @@ from decorators import profile_required, ownership_required
 from forms import CampaignForm, QRCodeForm
 
 from application.models import Campaign, QRCode
-from application.admin.warehouse import Inventory
+from application.admin.warehouse import inventory
 from application.mobile.decorators import qrcode_required, campaign_required
 
 portal = Blueprint('portal', __name__, template_folder='templates')

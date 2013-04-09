@@ -108,7 +108,7 @@ class Inventory(object):
         bucket.qrcodes=keys
         bucket.put()
 
-    def alloc(self, n):
+    def alloc(self, campaign_key, n):
         keys=[]
         remainder=n
         for bucket in Bucket.query():
@@ -118,6 +118,16 @@ class Inventory(object):
                 bucket.qrcodes=bucket.qrcodes[remainder:]
                 bucket.headcount-=remainder
                 bucket.put()
+                qrcodes=[]
+                for key in keys:
+                    qrcode=key.get()
+                    qrcode.campaign=campaign_key
+                    qrcodes.append(qrcode)
+                keys=ndb.put_multi(qrcodes)
+                campaign=campaign_key.get()
+                campaign.qrcodes.extend(keys)
+                campaign.tally+=len(keys)
+                campaign.put()
                 return keys
             else:
                 remainder-=available
@@ -126,3 +136,5 @@ class Inventory(object):
                 bucket.headcount=0
                 bucket.put()
 
+
+inventory = Inventory()

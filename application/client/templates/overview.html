@@ -11,9 +11,10 @@
         <div class="well sidebar-nav" id="actions">
             <ul class="nav nav-list" id="actions-list">
                 <li class="nav-header" id="greeting">Hi {{ profile.nickname }}!</li>
+                <hr>
                 <li class="nav-header" id="campaigns">Campaigns</li>
                 {% for key in profile.campaigns %}
-                <li><span class="badge"><a href="/client/{{ key.urlsafe() }}.campaign">{{ key.get().name }}</a></span></li>
+                <li><span class="badge"><a href="/client/{{ key.urlsafe() }}.campaign">{{ key.get().name }}</a></span> {{ key.get().tally }}</li>
                 {% endfor %}
             </ul>
         </div>
