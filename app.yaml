@@ -40,7 +40,7 @@ handlers:
 - url: /client
   script: application.app
 
-- url: /(admin|client|m|shop|support|alpha|beta|gamma|api)/.*
+- url: /(admin|client|m|claim|log|shop|support|alpha|beta|gamma|api)/.*
   script: application.app
 
 - url: /

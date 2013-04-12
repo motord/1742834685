@@ -11,6 +11,12 @@ from tracker import tracked
 
 scanner = Blueprint('scanner', __name__, template_folder='templates')
 
+TARGET_CONVERSE = 1
+TARGET_CDN = 2
+
+def converse(qrcode):
+    return redirect(url_for('journal.log', key=qrcode.key.urlsafe()))
+
 @scanner.route('/m/<string:key>', methods=['GET'])
 @qrcode_required
 @tracked
@@ -18,10 +24,12 @@ def scan(qrcode, **kwargs):
     url=qrcode.redirect
     if url:
         return redirect(url)
-    url=qrcode.campaign.redirect
+    url=qrcode.campaign.get().redirect
     if url:
         return redirect(url)
-    return render_template('hosting.html')
+    if qrcode.target:
+        return {TARGET_CONVERSE: converse}[qrcode.target](qrcode)
+    return redirect(url_for('plea.claim', key=qrcode.key))
 
 @scanner.route('/alpha/<string:key>', methods=['GET'])
 @qrcode_required

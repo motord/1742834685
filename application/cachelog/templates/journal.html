@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8">
+    <title>Log</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Peter Xue">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/twitter/stylesheets/bootstrap.min.css?0.607019018658564" type="text/css" rel="stylesheet" media="all">
+    <link href="/assets/twitter/stylesheets/style.css?0.6557543960953004" type="text/css" rel="stylesheet" media="all">
+
+    <!-- Le fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container-narrow">
+            <a class="brand" href="/">QRCache</a>
+        </div>
+    </div>
+</div>
+
+<div id="wrap" class="container-fluid">
+
+    <div class="content">
+        <div class="page-header">
+            <h1>Log</h1>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span9">
+                <div>
+                    <p>{{ qrcode.note }}</p>
+                </div>
+                <hr>
+                <div>
+                    <!-- Duoshuo Comment BEGIN -->
+                    <style type="text/css">
+                        #ds-thread #ds-reset .ds-comments-info {
+                        }
+
+                        #ds-thread #ds-reset ul.ds-comments-tabs li.ds-tab a.ds-current {
+                            border: 0px;
+                            color: #848568;
+                            text-shadow: none;
+                            background: #f5f5f5;
+                        }
+
+                        #ds-thread #ds-reset .ds-highlight {
+                            font-family: Arial, Helvetica, sans-serif;
+                            font-size: 14px;
+                            font-weight: bold;
+                            color: #848568 !important;
+                        }
+
+                        #ds-thread #ds-reset ul.ds-comments-tabs li.ds-tab a.ds-current:hover {
+                            color: #696a52;
+                            background: #EEE
+                        }
+
+                        #ds-thread #ds-reset a.ds-highlight:hover {
+                            color: #696a52 !important;
+                        }
+
+                        #ds-thread {
+                            padding-left: 30px;
+                        }
+
+                        #ds-thread #ds-reset li.ds-post, #ds-thread #ds-reset .ds-post-self {
+                            border: 0 !important;
+                        }
+
+                        #ds-reset .ds-avatar, #ds-thread #ds-reset ul.ds-children .ds-avatar {
+                            top: 15px;
+                            left: -20px;
+                            padding: 5px;
+                            width: 36px;
+                            height: 36px;
+                            box-shadow: -1px 0 1px rgba(0, 0, 0, .15) inset;
+                            border-radius: 46px;
+                            background: #EEE;
+                        }
+
+                        #ds-thread .ds-avatar a {
+                            display: inline-block;
+                            padding: 1px;
+                            width: 32px;
+                            height: 32px;
+                            border: 1px solid #b9baa6;
+                            border-radius: 34px;
+                            background-color: #fff !important
+                        }
+
+                        #ds-thread .ds-avatar a:hover {
+                            border-color: #de5a4e
+                        }
+
+                        #ds-thread .ds-avatar > img {
+                            margin: 2px 0 0 2px
+                        }
+
+                        #ds-reset .ds-avatar img {
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 32px;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+                            -webkit-transition: .4s all ease-in-out;
+                            -moz-transition: .4s all ease-in-out;
+                            -o-transition: .4s all ease-in-out;
+                            -ms-transition: .4s all ease-in-out;
+                        }
+
+                        .ds-post-main:hover .ds-avatar img {
+                            -webkit-transform: rotate(360deg);
+                            -moz-transform: rotate(360deg);
+                            -o-transform: rotate(360deg);
+                            -ms-transform: rotate(360deg);
+                        }
+
+                        #ds-thread #ds-reset .ds-comment-body {
+                            background: #f5f5f5;
+                            padding: 15px 15px 15px 47px;
+                            border-radius: 5px;
+                            box-shadow: 0 1px 2px rgba(0, 0, 0, .15), 0 1px 0 rgba(255, 255, 255, .75) inset;
+                        }
+
+                        #ds-thread #ds-reset ul.ds-children .ds-comment-body {
+                            padding-left: 15px;
+                        }
+
+                        #ds-thread #ds-reset .ds-comment-body p {
+                            color: #787968
+                        }
+
+                        #ds-thread #ds-reset .ds-comments a.ds-user-name {
+                            font-weight: bold;
+                            color: #696A52 !important;
+                        }
+
+                        #ds-thread #ds-reset .ds-comments a.ds-user-name:hover {
+                            color: #D32 !important;
+                        }
+                    </style>
+                    <div class="ds-thread" data-thread-key=""
+                         data-title="" data-author-key="" data-url=""></div>
+                    <script type="text/javascript">
+                        var duoshuoQuery = {short_name:"qrcache"};
+                        (function () {
+                            var ds = document.createElement('script');
+                            ds.type = 'text/javascript';
+                            ds.async = true;
+                            ds.src = 'http://static.duoshuo.com/embed.js';
+                            ds.charset = 'UTF-8';
+                            (document.getElementsByTagName('head')[0]
+                                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+                        })();
+                    </script>
+                    <!-- Duoshuo Comment END -->
+                </div>
+            </div><!--/span-->
+            <div class="span3">
+                <img class="alpha" src="/alpha/{{ qrcode.key.urlsafe() }}" />
+            </div>
+        </div>
+
+
+    </div>
+    <div id="push"></div>
+
+</div> <!-- /container -->
+
+<div class="footer">
+    <div class="row">
+    </div>
+</div>
+
+<script>
+    var _gaq=[['_setAccount','UA-39357721-1'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+</body>
+</html>

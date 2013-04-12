@@ -15,6 +15,7 @@ from warehouse import inventory
 from models import Registry
 from application.support.models import Ticket
 from application.client.models import Profile
+from google.appengine.ext.ndb import Key
 
 bridge = Blueprint('bridge', __name__, template_folder='templates')
 
@@ -46,4 +47,12 @@ def stock():
 @bridge.route('/admin/heartbeat', methods=['GET'])
 def heartbeat():
     # inventory.bucket()
+    return 'OK'
+
+@bridge.route('/admin/sow', methods=['GET'])
+def sow():
+    qrcode=Key(urlsafe='aglzfmsyY2FjaGVyDgsSBlFSQ29kZRilsCQM').get()
+    qrcode.note='I was born lost and take no pleasure in being found.'
+    qrcode.target=1
+    qrcode.put()
     return 'OK'
