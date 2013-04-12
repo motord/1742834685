@@ -8,6 +8,7 @@ from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 from application.models import Campaign, QRCode
 from decorators import qrcode_required
 from tracker import tracked
+from application.decorators import orcanot
 
 scanner = Blueprint('scanner', __name__, template_folder='templates')
 
@@ -17,6 +18,7 @@ TARGET_CDN = 2
 def converse(qrcode):
     return redirect(url_for('journal.log', key=qrcode.key.urlsafe()))
 
+@orcanot
 @scanner.route('/m/<string:key>', methods=['GET'])
 @qrcode_required
 @tracked
