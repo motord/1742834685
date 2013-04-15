@@ -31,7 +31,7 @@ def scan(qrcode, **kwargs):
         return redirect(url)
     if qrcode.target:
         return {TARGET_CONVERSE: converse}[qrcode.target](qrcode)
-    return redirect(url_for('plea.claim', key=qrcode.key))
+    return redirect(url_for('plea.claim', key=qrcode.key.urlsafe()))
 
 @scanner.route('/alpha/<string:key>', methods=['GET'])
 @qrcode_required

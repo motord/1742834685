@@ -9,6 +9,7 @@ from functools import wraps
 from google.appengine.api import users
 from flask import redirect, request, abort
 from models import Profile
+from application.models import Campaign
 import logging
 
 def profile_required(func):
@@ -19,7 +20,8 @@ def profile_required(func):
             return redirect(users.create_login_url(request.url))
         profile=Profile.query(Profile.user==user).get()
         if not profile:
-            profile=Profile(user=user, nickname=user.nickname(), email=user.email())
+            key=Campaign(name='Inbox', client=user, tally=0).put()
+            profile=Profile(user=user, nickname=user.nickname(), email=user.email(), campaigns=[key], inbox=key)
         profile.put()
         kwargs['profile']=profile
         return func(*args, **kwargs)
