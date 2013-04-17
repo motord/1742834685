@@ -41,6 +41,10 @@
                 <li class="nav-header" id="redirect">Redirect</li>
                 <li><span class="label label-info"><a href="{{ qrcode.redirect}}">跳转地址</a></span></li>
                 {% endif %}
+                {% if qrcode.target==1 %}
+                <li class="nav-header" id="cachelog">Cache Log</li>
+                <li><span class="label label-info"><a href="{{ url_for('journal.log', key=qrcode.key.urlsafe()) }}">匮笺</a></span></li>
+                {% endif %}
             </ul>
         </div>
     </div>

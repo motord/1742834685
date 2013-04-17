@@ -28,6 +28,7 @@ def claim(qrcode, upyun, profile, **kwargs):
 def turf(qrcode, profile, **kwargs):
     qrcode.target=TARGET_CONVERSE
     qrcode.redirect=None
+    qrcode.note=request.form['note']
     if not qrcode.campaign:
         qrcode.campaign=profile.inbox
         inbox=profile.inbox.get()
@@ -35,6 +36,7 @@ def turf(qrcode, profile, **kwargs):
         inbox.tally+=1
         inbox.put()
     qrcode.put()
+    return redirect(url_for('journal.log', key=qrcode.key.urlsafe()))
 
 
 @plea.route('/claim/upyun/notify', methods=['POST'])

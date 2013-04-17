@@ -10,16 +10,13 @@ from forms import CampaignForm, QRCodeForm
 from application.models import Campaign, QRCode
 from application.admin.warehouse import inventory
 from application.mobile.decorators import qrcode_required, campaign_required
+from google.appengine.ext import ndb
 
 portal = Blueprint('portal', __name__, template_folder='templates')
 
 @portal.route('/client/', methods=['GET'])
 @profile_required
 def overview(profile):
-    key=Campaign(name='Inbox', client=profile.user, tally=0).put()
-    profile.campaigns.append(key)
-    profile.inbox=key
-    profile.put()
     return render_template('overview.html', profile=profile)
 
 @portal.route('/client/account', methods=['GET'])
