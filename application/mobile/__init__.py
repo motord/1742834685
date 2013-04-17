@@ -12,6 +12,7 @@ from application.decorators import orcanot
 
 scanner = Blueprint('scanner', __name__, template_folder='templates')
 
+TARGET_REDIRECT = 0
 TARGET_CONVERSE = 1
 TARGET_CDN = 2
 

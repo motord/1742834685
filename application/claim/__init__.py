@@ -9,7 +9,7 @@ from application.models import Campaign, QRCode
 from application.mobile.decorators import qrcode_required
 from decorators import upyun_packaged, UPYUN_BUCKET, UPYUN_URL
 from application.client.decorators import profile_required
-from application.mobile import TARGET_CONVERSE, TARGET_CDN
+from application.mobile import TARGET_REDIRECT, TARGET_CONVERSE, TARGET_CDN
 import re
 from google.appengine.ext.ndb import Key
 
@@ -26,18 +26,26 @@ def claim(qrcode, upyun, profile, **kwargs):
 @profile_required
 @qrcode_required
 def turf(qrcode, profile, **kwargs):
-    qrcode.target=TARGET_CONVERSE
-    qrcode.redirect=None
-    qrcode.note=request.form['note']
+    if 'redirect' not in request.form:
+        qrcode.target=TARGET_CONVERSE
+        qrcode.redirect=None
+        qrcode.note=request.form['note']
+        key=inbox_collect(qrcode, profile).put()
+        return redirect(url_for('journal.log', key=key.urlsafe()))
+    else:
+        qrcode.redirect=request.form['redirect']
+        qrcode.target=TARGET_REDIRECT
+        key=inbox_collect(qrcode, profile).put()
+        return redirect(url_for('portal.qrcode', key=key.urlsafe()))
+
+def inbox_collect(qrcode, profile):
     if not qrcode.campaign:
         qrcode.campaign=profile.inbox
         inbox=profile.inbox.get()
         inbox.qrcodes.append(qrcode.key)
         inbox.tally+=1
         inbox.put()
-    qrcode.put()
-    return redirect(url_for('journal.log', key=qrcode.key.urlsafe()))
-
+    return qrcode
 
 @plea.route('/claim/upyun/notify', methods=['POST'])
 def upyun_notify():
