@@ -16,6 +16,8 @@
                 {% for key in profile.campaigns %}
                 <li><span class="badge"><a href="/client/{{ key.urlsafe() }}.campaign">{{ key.get().name }}</a></span> {{ key.get().tally }}</li>
                 {% endfor %}
+                <hr>
+                <button class="btn btn-primary btn-mini">Add New Campaign</button>
             </ul>
         </div>
     </div>

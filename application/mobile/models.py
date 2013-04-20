@@ -15,6 +15,7 @@ class ScanRecord(ndb.Model):
     wall_time = ndb.IntegerProperty(required=True)
     cpu_time = ndb.IntegerProperty(required=True)
     random = ndb.FloatProperty(required=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
 
     def to_json(self):
         """Returns a dict containing the relevant information from this record.
@@ -22,8 +23,3 @@ class ScanRecord(ndb.Model):
         Note that the return value is not a JSON string, but rather a dict that can
         be passed to a JSON library for encoding."""
         return dict((k, v.__get__(self, self.__class__)) for k, v in self.properties().iteritems())
-
-class Slice(ndb.Model):
-    qrcode= ndb.KeyProperty(QRCode)
-    value = ndb.DateTimeProperty()
-    scans = ndb.IntegerProperty(default=0)

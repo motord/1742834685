@@ -7,11 +7,9 @@ from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from application.models import Campaign, QRCode
 from application.mobile.decorators import qrcode_required
-from decorators import upyun_packaged, UPYUN_BUCKET, UPYUN_URL
+from decorators import upyun_packaged, UPYUN_BUCKET, UPYUN_URL, upyun_bumper
 from application.client.decorators import profile_required
 from application.mobile import TARGET_REDIRECT, TARGET_CONVERSE, TARGET_CDN
-import re
-from google.appengine.ext.ndb import Key
 
 plea = Blueprint('plea', __name__, template_folder='templates')
 
@@ -26,17 +24,17 @@ def claim(qrcode, upyun, profile, **kwargs):
 @profile_required
 @qrcode_required
 def turf(qrcode, profile, **kwargs):
-    if 'redirect' not in request.form:
+    if 'redirect' in request.form:
+        qrcode.redirect=request.form['redirect']
+        qrcode.target=TARGET_REDIRECT
+        key=inbox_collect(qrcode, profile).put()
+        return redirect(url_for('portal.qrcode', key=key.urlsafe()))
+    else:
         qrcode.target=TARGET_CONVERSE
         qrcode.redirect=None
         qrcode.note=request.form['note']
         key=inbox_collect(qrcode, profile).put()
         return redirect(url_for('journal.log', key=key.urlsafe()))
-    else:
-        qrcode.redirect=request.form['redirect']
-        qrcode.target=TARGET_REDIRECT
-        key=inbox_collect(qrcode, profile).put()
-        return redirect(url_for('portal.qrcode', key=key.urlsafe()))
 
 def inbox_collect(qrcode, profile):
     if not qrcode.campaign:
@@ -48,37 +46,11 @@ def inbox_collect(qrcode, profile):
     return qrcode
 
 @plea.route('/claim/upyun/notify', methods=['POST'])
+@upyun_bumper
 def upyun_notify():
-    code=request.form['code']
-    message=request.form['message']
-    url=request.form['url']
-    time=request.form['time']
-    # sign=request.form['sign']
-    logging.info(url)
-    m = re.match(r'/(.*)/(.*)\.(.*)', url)
-    if m:
-        campaign=Key(urlsafe=m.group(1)).get()
-        qrcode=Key(urlsafe=m.group(2)).get()
-        suffix=m.group(3)
-        qrcode.redirect=UPYUN_URL.format(UPYUN_BUCKET, m.group(1), m.group(2), suffix)
-        qrcode.target=TARGET_CDN
-        qrcode.put()
     return 'OK'
 
 @plea.route('/claim/upyun/return', methods=['GET'])
-def upyun_return():
-    code=request.args['code']
-    message=request.args['message']
-    url=request.args['url']
-    time=request.args['time']
-    # sign=request.args['sign']
-    logging.info(url)
-    m = re.match(r'/(.*)/(.*)\.(.*)', url)
-    if m:
-        campaign=Key(urlsafe=m.group(1)).get()
-        qrcode=Key(urlsafe=m.group(2)).get()
-        suffix=m.group(3)
-        qrcode.redirect=UPYUN_URL.format(UPYUN_BUCKET, m.group(1), m.group(2), suffix)
-        qrcode.target=TARGET_CDN
-        qrcode.put()
-        return redirect(url_for('portal.qrcode', key=m.group(2)))
+@upyun_bumper
+def upyun_return(key):
+    return redirect(url_for('portal.qrcode', key=key))
