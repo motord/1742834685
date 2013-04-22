@@ -10,6 +10,7 @@ from application.mobile.decorators import qrcode_required
 from decorators import upyun_packaged, UPYUN_BUCKET, UPYUN_URL, upyun_bumper
 from application.client.decorators import profile_required
 from application.mobile import TARGET_REDIRECT, TARGET_CONVERSE, TARGET_CDN
+from google.appengine.ext import ndb
 
 plea = Blueprint('plea', __name__, template_folder='templates')
 
@@ -36,10 +37,16 @@ def turf(qrcode, profile, **kwargs):
         key=inbox_collect(qrcode, profile).put()
         return redirect(url_for('journal.log', key=key.urlsafe()))
 
+@ndb.transactional
 def inbox_collect(qrcode, profile):
-    if not qrcode.campaign:
-        qrcode.campaign=profile.inbox
-        inbox=profile.inbox.get()
+    if qrcode.campaign not in profile.campaigns:
+        giver=qrcode.campaign.get()
+        giver.qrcodes.remove(qrcode.key)
+        giver.tally-=1
+        giver.put()
+        receiver=profile.inbox
+        qrcode.campaign=receiver
+        inbox=receiver.get()
         inbox.qrcodes.append(qrcode.key)
         inbox.tally+=1
         inbox.put()

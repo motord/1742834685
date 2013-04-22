@@ -16,6 +16,7 @@ from models import Registry
 from application.support.models import Ticket
 from application.client.models import Profile
 from google.appengine.ext.ndb import Key
+from simmetrica import olap
 
 bridge = Blueprint('bridge', __name__, template_folder='templates')
 
@@ -47,6 +48,7 @@ def stock():
 @bridge.route('/admin/heartbeat', methods=['GET'])
 def heartbeat():
     # inventory.bucket()
+    olap.syncdb()
     return 'OK'
 
 @bridge.route('/admin/sow', methods=['GET'])
