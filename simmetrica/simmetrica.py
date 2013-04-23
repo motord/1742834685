@@ -6,17 +6,21 @@ from google.appengine.ext import ndb, deferred
 from google.appengine.api import memcache
 from keeper import Keeper
 from models import BufferDB
-from settings import CACHE_TIMEOUT, CACHE_KEY
+from settings import CACHE_TIMEOUT, CACHE_KEY, PROJECT_ID
 from decorators import cached
+from bqclient import BigQueryClient
+
+bigQueryClient=BigQueryClient()
 
 def prepare_query(sql, cache_key):
-    rv={'timeline':[{'timestamp':1366525800, 'scans':172},
-                    {'timestamp':1366525740, 'scans':148},
-                    {'timestamp':1366525680, 'scans':121},
-                    {'timestamp':1366525620, 'scans':76},
-                    {'timestamp':1366525560, 'scans':34},
-                    {'timestamp':1366525860, 'scans':3},
-                    {'timestamp':1366525500, 'scans':6}]}
+    bqdata=bigQueryClient.Query(sql, PROJECT_ID)
+    columns=[field['name'] for field in bqdata['schema']['fields']]
+    rv=[]
+    for row in bqdata['rows']:
+        r={}
+        for index, col in enumerate(columns):
+            r[col]=row['f'][index]['v']
+        rv.append(r)
     buffer=BufferDB.query(BufferDB.buffer_key==cache_key).get()
     if not buffer:
         buffer=BufferDB(buffer_key=cache_key)
