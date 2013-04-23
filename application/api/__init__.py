@@ -85,10 +85,10 @@ def resolution_qrcode(qrcode, resolution, **kwargs):
     result=olap.query(sql)
     return current_app.response_class(json.dumps(result, indent=None if request.is_xhr else 2), mimetype='application/json')
 
-@cruncher.route('/api/<string:resolution>/<string:key>.qrcode', methods=['GET'])
+@cruncher.route('/api/<string:resolution>/<string:key>/<string:tag>.tag', methods=['GET'])
 @campaign_required
-def resolution_campaign(campaign, resolution, **kwargs):
-    ids=', '.join([key.id() for key in campaign.qrcodes])
+def resolution_campaign(campaign, resolution, tag, **kwargs):
+    ids=', '.join([key.id() for key in campaign.tagged(tag)])
     sql='SELECT timestamp, COUNT(timestamp) AS scans ' \
         'FROM [qrcache.scanrecord] ' \
         'WHERE qrcode IN ({0}) AND resolution="{1}" ' \
@@ -99,10 +99,9 @@ def resolution_campaign(campaign, resolution, **kwargs):
 @cruncher.route('/api/<string:resolution>/<string:key>.breakdown', methods=['GET'])
 @campaign_required
 def resolution_campaign_breakdown(campaign, resolution, **kwargs):
-    ids=', '.join([key.id() for key in campaign.qrcodes])
     sql='SELECT qrcode, timestamp, COUNT(timestamp) AS scans ' \
         'FROM [qrcache.scanrecord] ' \
-        'WHERE qrcode IN ({0}) AND resolution="{1}" ' \
-        'GROUP BY qrcode, timestamp;'.format(ids, resolution)
+        'WHERE campaign ={0}) AND resolution="{1}" ' \
+        'GROUP BY qrcode, timestamp;'.format(campaign.key.id(), resolution)
     result=olap.query(sql)
     return current_app.response_class(json.dumps(result, indent=None if request.is_xhr else 2), mimetype='application/json')

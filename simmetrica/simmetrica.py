@@ -9,6 +9,8 @@ from models import BufferDB
 from settings import CACHE_TIMEOUT, CACHE_KEY, PROJECT_ID
 from decorators import cached
 from bqclient import BigQueryClient
+from flask import request
+import logging
 
 bigQueryClient=BigQueryClient()
 
@@ -47,10 +49,10 @@ class Simmetrica(object):
         pass
 
     @ndb.transactional
-    def push(self, template, event, now=None):
+    def push(self, event, now=None):
         entries=[]
         for resolution, timestamp in self.get_timestamps_for_push(now):
-            entries.append(self.get_event_entry(template, event, resolution, timestamp))
+            entries.append(self.get_event_entry(event, resolution, timestamp))
         Keeper.write(entries)
 
     @cached()
@@ -69,11 +71,12 @@ class Simmetrica(object):
     def round_time(self, time, resolution):
         return int(time - (time % resolution))
 
-    def get_event_entry(self, template, event, resolution, timestamp):
-        return template.format(event, resolution, timestamp)
+    def get_event_entry(self, event, resolution, timestamp):
+        return event.format(resolution, timestamp)
 
     def get_current_timestamp(self):
         return int(time.time())
 
-    def syncdb(self):
-        pass
+    def syncdb(self, request_body):
+        bigQueryClient.load_data(request_body)
+        # logging.info(request_body)

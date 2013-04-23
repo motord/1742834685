@@ -1,0 +1,30 @@
+--xxx
+Content-Type: application/json; charset=UTF-8
+
+{
+    'configuration': {
+        'load': {
+        'sourceFormat': 'NEWLINE_DELIMITED_JSON',
+        'createDisposition': 'CREATE_IF_NEEDED',
+        'writeDisposition': 'WRITE_APPEND',
+         'schema': {
+               'fields': [
+                   {'name':'campaign', 'type':'INTEGER'},
+                   {'name':'qrcode', 'type':'INTEGER'},
+                   {'name':'resolution', 'type':'STRING'},
+                   {'name':'timestamp', 'type':'INTEGER'}
+               ]
+           },
+       'destinationTable': {
+            'projectId': 'samdeha.com:qrcache',
+            'datasetId': 'qrcache',
+            'tableId': 'scanrecord'
+            }
+        }
+    }
+}
+--xxx
+Content-Type: application/octet-stream
+
+{{ data }}
+--xxx--

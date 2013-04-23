@@ -5,6 +5,7 @@ from settings import WRITE_BLOCK, NUM_SHARDS, SHARD_STRING_INDEX, USE_MEMCACHE_K
 import random
 from google.appengine.ext import ndb
 from models import Slice, Block
+import logging
 
 class MemcacheKeeper():
     def write(self, entries):
@@ -13,6 +14,7 @@ class MemcacheKeeper():
         if slice:
             entries.append(slice)
         memcache.set(shard_string_index, '\r\n'.join(entries))
+        logging.info(shard_string_index)
 
     @ndb.transactional
     def read(self):
@@ -36,6 +38,7 @@ class SliceKeeper():
             entries.append(slice.content)
         slice.content = '\r\n'.join(entries)
         slice.put()
+        logging.info(shard_string_index)
 
     @ndb.transactional
     def read(self):

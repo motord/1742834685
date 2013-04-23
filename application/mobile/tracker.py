@@ -13,7 +13,7 @@ from google.appengine.api import quota
 from google.appengine.ext import deferred
 from simmetrica import olap
 
-SIMMETRICA_TEMPLATE='{{"qrcode": {0}, "resolution": "{1}", "timestamp": {2}}}'
+SIMMETRICA_TEMPLATE='{{{{"campaign": {0}, "qrcode": {1}, "resolution": "{{0}}", "timestamp": {{1}}}}}}'
 WRITE_SCANRECORD=False
 
 def _stringifyHeaders(header_dict):
@@ -39,6 +39,6 @@ def tracked(func):
                 wall_time=elapsed,
                 cpu_time=quota.get_request_api_cpu_usage(),
                 random=random.random()).put()
-        olap.push(SIMMETRICA_TEMPLATE, key.id())
+        olap.push(SIMMETRICA_TEMPLATE.format(key.get().campaign.id(), key.id()))
         return response
     return decorated_view
