@@ -44,8 +44,10 @@ def stock():
 @bridge.route('/admin/heartbeat', methods=['GET'])
 def heartbeat():
     # inventory.bucket()
-    request_body=render_template('bigquery.request.body', data=Keeper.read())
-    olap.syncdb(request_body)
+    data=Keeper.read()
+    if len(data)>0:
+        request_body=render_template('bigquery.request.body', data=data)
+        olap.syncdb(request_body)
     return 'OK'
 
 @bridge.route('/admin/sow', methods=['GET'])
