@@ -23,7 +23,7 @@
 {% endblock %}
 {% block head_script %}
 <script src="/assets/twitter/javascripts/d3.min.js"></script>
-<script src="/assets/twitter/javascripts/rickshaw.min.js"></script>
+<script src="/assets/twitter/javascripts/rickshaw.js"></script>
 <script src="/assets/twitter/javascripts/admin/dashboard.js"></script>
 {% endblock head_script %}
 {% block content %}
@@ -47,34 +47,29 @@
 {% block tail_script %}
 <script>
 
-    var data = [{x:1366525800, y:172},
-                {x:1366525740, y:148},
-                {x:1366525680, y:121},
-                {x:1366525620, y:76},
-                {x:1366525560, y:34},
-                {x:1366525860, y:3},
-                {x:1366525500, y:6}];
-
-    var graph = new Rickshaw.Graph( {
+    var graph = new Rickshaw.Graph.Ajax( {
         element: document.querySelector("#chart"),
         width: 800,
         height: 600,
+        dataURL: '/api/min/all.json',
         series: [ {
             color: 'steelblue',
-            data: data
-        } ]
+            name: 'all'
+        } ],
+        onComplete: function(transport) {
+            var y_axis = new Rickshaw.Graph.Axis.Y( {
+                graph: transport.graph,
+                orientation: 'left',
+                tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                element: document.getElementById('y_axis')
+            } );
+            y_axis.graph.update();
+            var x_axis = new Rickshaw.Graph.Axis.Time({
+                graph: transport.graph
+            });
+            x_axis.graph.update();
+        }
     } );
-
-    var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );
-
-    var y_axis = new Rickshaw.Graph.Axis.Y( {
-        graph: graph,
-        orientation: 'left',
-        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-        element: document.getElementById('y_axis')
-    } );
-
-    graph.render();
 
 </script>
 {% endblock %}

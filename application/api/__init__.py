@@ -70,9 +70,11 @@ def resolution_all(resolution, **kwargs):
     sql='SELECT timestamp, COUNT(timestamp) AS scans ' \
         'FROM [qrcache.scanrecord] ' \
         'WHERE resolution="{0}" ' \
-        'GROUP BY timestamp;'.format(resolution)
-    result=olap.query(sql)
-    return current_app.response_class(json.dumps(result, indent=None if request.is_xhr else 2), mimetype='application/json')
+        'GROUP BY timestamp ORDER BY timestamp;'.format(resolution)
+    results=olap.query(sql)
+    if results:
+        results = [{'name': 'all', 'data':[{'x': int(r['timestamp']), 'y': int(r['scans'])} for r in results]}]
+    return current_app.response_class(json.dumps(results, indent=None if request.is_xhr else 2), mimetype='application/json')
 
 @cruncher.route('/api/<string:resolution>/<string:key>.qrcode', methods=['GET'])
 @qrcode_required
@@ -81,9 +83,9 @@ def resolution_qrcode(qrcode, resolution, **kwargs):
     sql='SELECT timestamp, COUNT(timestamp) AS scans ' \
         'FROM [qrcache.scanrecord] ' \
         'WHERE qrcode={0} AND resolution="{1}" ' \
-        'GROUP BY timestamp;'.format(id, resolution)
-    result=olap.query(sql)
-    return current_app.response_class(json.dumps(result, indent=None if request.is_xhr else 2), mimetype='application/json')
+        'GROUP BY timestamp ORDER BY timestamp;'.format(id, resolution)
+    results=olap.query(sql)
+    return current_app.response_class(json.dumps(results, indent=None if request.is_xhr else 2), mimetype='application/json')
 
 @cruncher.route('/api/<string:resolution>/<string:key>/<string:tag>.tag', methods=['GET'])
 @campaign_required
@@ -92,9 +94,9 @@ def resolution_campaign(campaign, resolution, tag, **kwargs):
     sql='SELECT timestamp, COUNT(timestamp) AS scans ' \
         'FROM [qrcache.scanrecord] ' \
         'WHERE qrcode IN ({0}) AND resolution="{1}" ' \
-        'GROUP BY timestamp;'.format(ids, resolution)
-    result=olap.query(sql)
-    return current_app.response_class(json.dumps(result, indent=None if request.is_xhr else 2), mimetype='application/json')
+        'GROUP BY timestamp ORDER BY timestamp;'.format(ids, resolution)
+    results=olap.query(sql)
+    return current_app.response_class(json.dumps(results, indent=None if request.is_xhr else 2), mimetype='application/json')
 
 @cruncher.route('/api/<string:resolution>/<string:key>.breakdown', methods=['GET'])
 @campaign_required
@@ -102,6 +104,6 @@ def resolution_campaign_breakdown(campaign, resolution, **kwargs):
     sql='SELECT qrcode, timestamp, COUNT(timestamp) AS scans ' \
         'FROM [qrcache.scanrecord] ' \
         'WHERE campaign ={0}) AND resolution="{1}" ' \
-        'GROUP BY qrcode, timestamp;'.format(campaign.key.id(), resolution)
-    result=olap.query(sql)
-    return current_app.response_class(json.dumps(result, indent=None if request.is_xhr else 2), mimetype='application/json')
+        'GROUP BY qrcode, timestamp ORDER BY qrcode, timestamp;'.format(campaign.key.id(), resolution)
+    results=olap.query(sql)
+    return current_app.response_class(json.dumps(results, indent=None if request.is_xhr else 2), mimetype='application/json')
